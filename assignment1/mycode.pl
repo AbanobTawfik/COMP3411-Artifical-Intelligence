@@ -53,15 +53,11 @@ sumsq_even(Numbers, Sum) :-
 % same_name(pat,brian) should return false
 % married women retain their original birthname
 % all names originate from the fathers in this case!
-% now we just check all the FATHERS of each person and if either one links in the search
+% now we just check all the FATHERS of each person and if either, one person is the ancestor or they both share a common ancestor
 % then we return true
 % else we return false
 
-% helper function to check the fathers recursively up the tree to try to find common
-% father ancestor where the family name is based off
-
 % basecase to check if we have a matching father for our recursion
-
 check_fathers(Ancestor, Person) :-
 	%return true if the ancestor is the parent of person we are checking
 	parent(Ancestor, Person),
@@ -69,15 +65,17 @@ check_fathers(Ancestor, Person) :-
 	male(Ancestor).
 
 % now we perform our recursion search which will go up the tree searching for matching ancestor
-% this will be done bi-directionally for example in our case above
-% if input is jim, jenny and we only did it one direction, we would get it true, since jim is jennys ancestor
-% but we do it bi-directionally incase input is jenny, jim and we need to ensure jim is still ancestor of jenny
+% this will recursively climb the tree searching for fathers of the person
+% it will use the ancestor variable to find the highest root value father ancestor in the family tree
+% for example in our tree we have jim - father -> brian - father -> jenny
+% so it will first parse brian as jennys highest ancestor
+% next call it will parse jim as jennys highest ancestor who is also brians ancestor
 check_fathers(Ancestor, Person) :-
-	%we first want to find a parent to the person we are searching 
+	% we first want to find a parent to the person we are searching 
 	parent(Random, Person),
-	%next we want to check the fathers of that person recursively
+	% next we want to check the fathers of that parent recursively
 	check_fathers(Ancestor, Random),
-	%return true if the ancestor is male (dont take mothers names)
+	% return true if the ancestor is male (dont take mothers names)
 	male(Random).
 
 % now we want to call our samename function which will check the fathers of person 2 recursively
@@ -98,12 +96,48 @@ same_name(Person1, Person2) :-
 	check_fathers(CommonAncestor, Person2).
 
 
-parent(jim, brian).
-parent(jim, tom).
-parent(brian, jenny).
-parent(brian,james).
-parent(pat, brian).
-female(pat).
-female(jenny).
-male(jim).
-male(brian).
+% parent(jim, brian).
+% parent(jim, tom).
+% parent(brian, jenny).
+% parent(brian,james).
+% parent(pat, brian).
+% female(pat).
+% female(jenny).
+% male(jim).
+% male(brian).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Question 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% sqrt_list function will take a list of numbers as input, and will create a 
+% list that contains a pair of (1. number from initial list, 2. square root of that number)
+% essentially creating a list of pairs
+% example 
+% ?- sqrt_list([0,2,289], Result).
+% Result = [[0, 0.0], [2, 1.4142135623730951], [289, 17.0]].
+
+% the base case of our recursionw ill be that
+% the sqrt_pair of an empty list will also be an empty list
+sqrt_list(NumberList, ResultList) :-
+	NumberList = [],
+	ResultList = [].
+
+% now we want to go through the list recursively and each time we have an element
+% that is >= 0 we want to add the pair to our result list
+% added case that is our head is negative we will return false as the sqrt
+% cannot handle negative number of the real number system.
+sqrt_list(NumberList, ResultList) :-
+	% convert our variable NumberList to a list which can be examined by 
+	% the value at the start (Head) and the rest of the list (Tail)
+	NumberList = [Head | Tail],
+	% making sure that the value of the head is >= 0
+	Head >= 0,
+	% calculate resultant sqrt value since head >= 0
+	Resultant is sqrt(Head),
+	% convert our variable ResultList to a list which can be examine dby
+	% the value at the start (Head2) and the rest of the list (Tail2)
+	ResultList = [Head2 | Tail2],
+	% set the next value in our result list to be the pair that is head and the sqrt(head)
+	Head2 = [Head, Resultant],
+	%recursively call the function on the rest of list till we hate base case
+	sqrt_list(Tail, Tail2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Question 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
