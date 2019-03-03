@@ -95,7 +95,7 @@ same_name(Person1, Person2) :-
 	check_fathers(CommonAncestor, Person1),
 	check_fathers(CommonAncestor, Person2).
 
-
+% test input which has uncle, brother, grandparent
 % parent(jim, brian).
 % parent(jim, tom).
 % parent(brian, jenny).
@@ -140,4 +140,64 @@ sqrt_list(NumberList, ResultList) :-
 	%recursively call the function on the rest of list till we hate base case
 	sqrt_list(Tail, Tail2).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%% Question 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Question 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% sign_runs function will take a list of numbers as input, it will iterate
+% through the list of numbers adding a value to a sublist of our result list 
+% until the sign of the next value changes
+% upon sign changes it will create a new sublist in our result list
+% for example
+% input list = [8,-1,-3,0,2,0,-4]
+% result list will be [[8], [-1, -3], [0, 2, 0], [-4]]
+% at each sign change a new list is created to our result list
+
+% base case for our recursion on empty list
+ sign_runs([], RunList) :-
+	RunList = [].
+
+% case when next value is negative
+sign_runs(List, RunList) :-
+	% convert our variable List to a list which can be examined by 
+	% the value at the start (Head) and the rest of the list (Tail)
+	List = [Head | _],
+    Head < 0,
+    add_negatives(List, NegativeRun, RemainingList),
+	sign_runs(RemainingList, NewRun),
+    RunList = [NegativeRun | NewRun].
+
+% case when next value is positive
+sign_runs(List, RunList) :-
+	% convert our variable List to a list which can be examined by 
+	% the value at the start (Head) and the rest of the list (Tail)
+	List = [Head | _],
+    Head >= 0,
+    add_positives(List, PositiveRun, RemainingList),
+	sign_runs(RemainingList, NewRun),
+    RunList = [PositiveRun | NewRun].
+
+add_negatives([], [], []).
+
+add_negatives(List,NegativeRun,RemainingList) :-
+	List = [Head | Tail],
+	Head < 0,
+	add_negatives(Tail,NegativeRun2,RemainingList),
+	NegativeRun = [Head | NegativeRun2].
+
+add_negatives(List,NegativeRun,RemainingList) :-
+	List = [Head | _],
+	Head >= 0,
+	NegativeRun = [],
+	RemainingList = List.
+
+add_positives([], [], []).
+
+add_positives(List,PositiveRun,RemainingList) :-
+	List = [Head | Tail],
+	Head >= 0,
+	add_positives(Tail,PositiveRun2,RemainingList),
+	PositiveRun = [Head | PositiveRun2].
+
+add_positives(List,PositiveRun,RemainingList) :-
+	List = [Head | _],
+	Head < 0,
+	PositiveRun = [],
+	RemainingList = List.
