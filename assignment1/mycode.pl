@@ -11,33 +11,25 @@
 
 
 % case of empty list, our sum would be 0
-sumsq_even(Numbers, Sum) :-
-	% if our list is the empty list 
-	Numbers = [],
-	% then the sum is also 0
-	Sum = 0.
+% if our list is the empty list 
+% then the sum is also 0
+sumsq_even([], 0). 
 
 % case of even number as Head of current list in recursive function
-sumsq_even(Numbers, Sum) :- 
-	% convert our variable Numbers to a list which can be examined by 
-	% the value at the start (Head) and the rest of the list (Tail)
-	Numbers = [Head | Tail],
+sumsq_even([H | T], Sum) :- 
 	% if the head % 2 == 0 (from the assignment specification) then the number is even
-	0 is Head mod 2,
+	0 is H mod 2,
 	% recursive call on the sumsq_even function with the remaining list and running sum
-	sumsq_even(Tail, Result),
+	sumsq_even(T, RunningSum),
 	% update the sum to be the square of the EVEN head added to the current running sum
-	Sum is Head*Head + Result.
+	Sum is H*H + RunningSum.
 
 % case of odd number as Head of current list in recursive function
-sumsq_even(Numbers, Sum) :-
-	% convert our variable Numbers to a list which can be examined by 
-	% the value at the start (Head) and the rest of the list (Tail)
-	Numbers = [Head | Tail],
+sumsq_even([H | T], Sum) :-
 	% if the head % 2 == 1 (from the assignment specification) then the number is odd
-	1 is Head mod 2,
+	1 is H mod 2,
 	% so we just make another call to the remaining list and current sum.
-	sumsq_even(Tail, Sum).	
+	sumsq_even(T, Sum).	
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Question 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % same_name function will return true if both arguements have the same family same_name
@@ -58,11 +50,11 @@ sumsq_even(Numbers, Sum) :-
 % else we return false
 
 % basecase to check if we have a matching father for our recursion
-check_fathers(Ancestor, Person) :-
+check_fathers(Father, Person) :-
 	%return true if the ancestor is the parent of person we are checking
-	parent(Ancestor, Person),
+	parent(Father, Person),
 	%and he is a male (mothers dont pass their family names down)
-	male(Ancestor).
+	male(Father).
 
 % now we perform our recursion search which will go up the tree searching for matching ancestor
 % this will recursively climb the tree searching for fathers of the person
@@ -70,11 +62,11 @@ check_fathers(Ancestor, Person) :-
 % for example in our tree we have jim - father -> brian - father -> jenny
 % so it will first parse brian as jennys highest ancestor
 % next call it will parse jim as jennys highest ancestor who is also brians ancestor
-check_fathers(Ancestor, Person) :-
+check_fathers(Father, Person) :-
 	% we first want to find a parent to the person we are searching 
 	parent(Random, Person),
 	% next we want to check the fathers of that parent recursively
-	check_fathers(Ancestor, Random),
+	check_fathers(Father, Random),
 	% return true if the ancestor is male (dont take mothers names)
 	male(Random).
 
@@ -92,8 +84,8 @@ same_name(Person1, Person2) :-
 % tom has father jim, and jenny has grandfather jim so they share the same name from jim
 % so we want to check if they both have the same ancestor jim (CommonAncestor would return true for BOTH)
 same_name(Person1, Person2) :-
-	check_fathers(CommonAncestor, Person1),
-	check_fathers(CommonAncestor, Person2).
+	check_fathers(CommonMaleAncestor, Person1),
+	check_fathers(CommonMaleAncestor, Person2).
 
 % test input which has uncle, brother, grandparent
 % parent(jim, brian).
@@ -116,29 +108,21 @@ same_name(Person1, Person2) :-
 
 % the base case of our recursionw ill be that
 % the sqrt_pair of an empty list will also be an empty list
-sqrt_list(NumberList, ResultList) :-
-	NumberList = [],
-	ResultList = [].
+sqrt_list([], []).
 
 % now we want to go through the list recursively and each time we have an element
 % that is >= 0 we want to add the pair to our result list
 % added case that is our head is negative we will return false as the sqrt
 % cannot handle negative number of the real number system.
-sqrt_list(NumberList, ResultList) :-
-	% convert our variable NumberList to a list which can be examined by 
-	% the value at the start (Head) and the rest of the list (Tail)
-	NumberList = [Head | Tail],
+sqrt_list([H | T], [H2 | T2]) :-
 	% making sure that the value of the head is >= 0
-	Head >= 0,
+	H >= 0,
 	% calculate resultant sqrt value since head >= 0
-	Resultant is sqrt(Head),
-	% convert our variable ResultList to a list which can be examine dby
-	% the value at the start (Head2) and the rest of the list (Tail2)
-	ResultList = [Head2 | Tail2],
+	Resultant is sqrt(H),
 	% set the next value in our result list to be the pair that is head and the sqrt(head)
-	Head2 = [Head, Resultant],
+	H2 = [H, Resultant],
 	%recursively call the function on the rest of list till we hate base case
-	sqrt_list(Tail, Tail2).
+	sqrt_list(T, T2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Question 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sign_runs function will take a list of numbers as input, it will iterate
@@ -151,15 +135,14 @@ sqrt_list(NumberList, ResultList) :-
 % at each sign change a new list is created to our result list
 
 % base case for our recursion on empty list
- sign_runs([], RunList) :-
-	RunList = [].
+ sign_runs([], []).
 
 % case when next value is negative
 sign_runs(List, RunList) :-
 	% convert our variable List to a list which can be examined by 
 	% the value at the start (Head) and the rest of the list (Tail)
-	List = [Head | _],
-    Head < 0,
+	List = [H | _],
+    H < 0,
     add_negatives(List, NegativeRun, RemainingList),
 	sign_runs(RemainingList, NewRun),
     RunList = [NegativeRun | NewRun].
@@ -168,8 +151,8 @@ sign_runs(List, RunList) :-
 sign_runs(List, RunList) :-
 	% convert our variable List to a list which can be examined by 
 	% the value at the start (Head) and the rest of the list (Tail)
-	List = [Head | _],
-    Head >= 0,
+	List = [H | _],
+    H >= 0,
     add_positives(List, PositiveRun, RemainingList),
 	sign_runs(RemainingList, NewRun),
     RunList = [PositiveRun | NewRun].
@@ -177,27 +160,53 @@ sign_runs(List, RunList) :-
 add_negatives([], [], []).
 
 add_negatives(List,NegativeRun,RemainingList) :-
-	List = [Head | Tail],
-	Head < 0,
-	add_negatives(Tail,NegativeRun2,RemainingList),
-	NegativeRun = [Head | NegativeRun2].
+	List = [H | T],
+	H < 0,
+	add_negatives(T,NegativeRun2,RemainingList),
+	NegativeRun = [H | NegativeRun2].
 
 add_negatives(List,NegativeRun,RemainingList) :-
-	List = [Head | _],
-	Head >= 0,
+	List = [H | _],
+	H >= 0,
 	NegativeRun = [],
 	RemainingList = List.
 
 add_positives([], [], []).
 
 add_positives(List,PositiveRun,RemainingList) :-
-	List = [Head | Tail],
-	Head >= 0,
-	add_positives(Tail,PositiveRun2,RemainingList),
-	PositiveRun = [Head | PositiveRun2].
+	List = [H | T],
+	H >= 0,
+	add_positives(T,PositiveRun2,RemainingList),
+	PositiveRun = [H | PositiveRun2].
 
 add_positives(List,PositiveRun,RemainingList) :-
-	List = [Head | _],
-	Head < 0,
+	List = [H | _],
+	H < 0,
 	PositiveRun = [],
 	RemainingList = List.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Question 5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% sign_runs function will take a list of numbers as input, it will iterate
+% through the list of numbers adding a value to a sublist of our result list 
+% until the sign of the next value changes
+% upon sign changes it will create a new sublist in our result list
+% for example
+% input list = [8,-1,-3,0,2,0,-4]
+% result list will be [[8], [-1, -3], [0, 2, 0], [-4]]
+% at each sign change a new list is created to our result list
+
+heap_property(empty,_).
+
+heap_property(tree(_,Key,_),Value) :-
+	Key >= Value.
+
+is_heap(empty).
+is_heap(tree(empty,empty,empty)).
+
+is_heap(tree(Left,Key,Right)) :-
+	heap_property(Left, Key),
+	heap_property(Right, Key),
+	is_heap(Left),
+	is_heap(Right).
