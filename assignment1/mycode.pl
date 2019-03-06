@@ -219,7 +219,7 @@ add_negatives(List,NegativeRun,RemainingList) :-
 add_positives([], [], []).
 
 % this will be the recursive case when we encouter positive values
-$ for the list head
+% for the list head
 add_positives(List,PositiveRun,RemainingList) :-
     % convert our variable list to a list which can be examined by
     % the value at the start (Head), and the remaining list (Tail)
