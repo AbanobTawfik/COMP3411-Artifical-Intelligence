@@ -44,7 +44,7 @@ sumsq_even([H | T], Sum) :-
 % same_name(jim,jenny) should return true
 % same_name(pat,brian) should return false
 % married women retain their original birthname
-% all names originate from the fathers in this case!
+% all names originate from the fathers in this case
 % now we just check all the FATHERS of each person and if either, one person is the ancestor or they both share a common ancestor
 % then we return true
 % else we return false
@@ -132,7 +132,7 @@ sqrt_list([H | T], [H2 | T2]) :-
 % for example
 % input list = [8,-1,-3,0,2,0,-4]
 % result list will be [[8], [-1, -3], [0, 2, 0], [-4]]
-% at each sign change a new list is appended to our result list
+% at each sign change a new list is added to the end of  our result list
 % note we need to update our RunList at the end of the recursion since
 % prolog doesnt allow for us to do the following
 % 1. check value is = []
@@ -145,7 +145,7 @@ sqrt_list([H | T], [H2 | T2]) :-
 % first it will check the head of the list
 % it will check the sign of the head
 % then it will go across the list adding values it encouters next with the same sign
-% when we reach a element in list with different sign we exit and dont add it in!
+% when we reach a element in list with different sign we exit and dont add it in
 % then we return to sign_runs and do the same procedure for the next element recursively
 
 % base case for our recursion on empty list
