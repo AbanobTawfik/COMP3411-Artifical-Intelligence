@@ -68,41 +68,33 @@ log_table([Head | Remaining], [[Head, LogResult] | Rest]) :-
 
 paruns([],[]).
 
-paruns(List, RunList) :-
-    List = [Head | _],
+paruns([Head | Tail], [OddRun | Reset]) :-
     Head mod 2 =\= 0,
-    oddRun(List, OddRun, Rest),
-    paruns(Rest, Reset),
-    RunList = [OddRun | Reset].
+    oddRun([Head | Tail], OddRun, Rest),
+    paruns(Rest, Reset).
 
 oddRun([], [], []).
 
-oddRun([Head | Tail], [], Rest) :-
-    Head mod 2 =:= 0,
-    Rest = [Head | Tail].
+oddRun([Head | Tail], [], [Head | Tail]) :-
+    Head mod 2 =:= 0.
 
-oddRun([Head | Tail], OddRun, Rest) :-
+oddRun([Head | Tail], [Head | NextOdd], Rest) :-
     Head mod 2 =\= 0,
-    oddRun(Tail, NextOdd, Rest),
-    OddRun = [Head | NextOdd].
+    oddRun(Tail, NextOdd, Rest).
 
-paruns(List, RunList) :-
-    List = [Head | _],
+paruns([Head | Tail], [EvenRun | Reset]) :-
     Head mod 2 =:= 0,
-    evenRun(List, EvenRun, Rest),
-    paruns(Rest, Reset),
-    RunList = [EvenRun | Reset].    
+    evenRun([Head | Tail], EvenRun, Rest),
+    paruns(Rest, Reset).  
 
 evenRun([], [], []).
 
-evenRun([Head | Tail], [], Rest) :-
-    Head mod 2 =\= 0,
-    Rest = [Head | Tail].
+evenRun([Head | Tail], [], [Head | Tail]) :-
+    Head mod 2 =\= 0.
 
-evenRun([Head | Tail], EvenRun, Rest) :-
+evenRun([Head | Tail], [Head | NextEven], Rest) :-
     Head mod 2 =:= 0,
-    evenRun(Tail, NextEven, Rest),
-    EvenRun = [Head | NextEven].    
+    evenRun(Tail, NextEven, Rest).  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
