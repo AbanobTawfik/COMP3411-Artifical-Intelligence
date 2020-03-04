@@ -47,8 +47,10 @@ sumsq_even([Head | Remaining], Sum) :-
 % ?- X = log(3.7).
 % X = log(3.7).
 
+% base case empty list
 log_table([], []).
 
+% case 2, go through list adding the value and log value pair to the return list
 log_table([Head | Remaining], [[Head, LogResult] | Rest]) :-
     LogResult is log(Head),
     log_table(Remaining, Rest).
@@ -66,32 +68,48 @@ log_table([Head | Remaining], [[Head, LogResult] | Rest]) :-
 % Note: you can find out how to test if a number is even or odd from the Prolog
 % Dictionary 
 
+% base case empty list
 paruns([],[]).
 
+% case when we have next element as odd
+% pass the list to add all elements up until the next even value
+% as a sublist, to the return list
 paruns([Head | Tail], [OddRun | Reset]) :-
     Head mod 2 =\= 0,
     oddRun([Head | Tail], OddRun, Rest),
     paruns(Rest, Reset).
 
+% base case for oddrun, no more values to compute
 oddRun([], [], []).
 
+% exit case for odd run when next element is even, we return the remaining list to be proccessed
 oddRun([Head | Tail], [], [Head | Tail]) :-
     Head mod 2 =:= 0.
 
+% case when next element is odd, we want to add the current head of list to the sublist, and 
+% continue through to the rest of the list. 
+% the rest parameter will give us the rest of the list remaining to proccess after our oddrun is created
+% for example if we had [1, 3, 2, 4] as our list and our current oddrun is [1, 3], the rest paramter will contain [2, 4]
+% as the remaining list to proccess, note above when we hit our exit case, the remaining list is assigned to the Tail 
+% passed in just before our exit case, [2, 4] is the last call to oddrun where we hit our exit case and the recursion unwinds 
 oddRun([Head | Tail], [Head | NextOdd], Rest) :-
     Head mod 2 =\= 0,
     oddRun(Tail, NextOdd, Rest).
 
+% same logic as handling odd runs, just flipped around for even values
 paruns([Head | Tail], [EvenRun | Reset]) :-
     Head mod 2 =:= 0,
     evenRun([Head | Tail], EvenRun, Rest),
     paruns(Rest, Reset).  
 
+% base case for even run, no more values to computer
 evenRun([], [], []).
 
+% exit case for even run when next element is odd, we return the remaining list to be proccessed
 evenRun([Head | Tail], [], [Head | Tail]) :-
     Head mod 2 =\= 0.
 
+% case when next element is even, follows the same logic as the case for oddrun when next element is odd
 evenRun([Head | Tail], [Head | NextEven], Rest) :-
     Head mod 2 =:= 0,
     evenRun(Tail, NextEven, Rest).  
@@ -106,63 +124,113 @@ evenRun([Head | Tail], [Head | NextEven], Rest) :-
 % ?- eval(div(add(1, mul(2, 3)), 2), V).
 % V = 3.5
 
+% case when we are evaluating a number, returns just number in V
+% example usage, eval(3, V) --> V = 3.
 eval(V, V) :- number(V).
 
+%%%%% ADD %%%%%
+% case when both variables in the add is numeric
+% just add the two numbers together
+% example usage, eval(add(3, 4), V) --> V = 3 + 4 --> V = 7
 eval(add(A, B), V) :-
     number(A),
     number(B),
     V is A + B.
 
+%%%%% ADD %%%%%
+% case when the first variable in the add is numeric, and the second variable is an expression
+% evaluate the expression  for the second and store the result in C
+% add A and C together
+% example usage, eval(add(3, add(3, 4)), V) --> V = 3 + eval(add(3, 4)) --> V = 3 + (3 + 4) --> V = 10
 eval(add(A, B), V) :-
     number(A),
     eval(B, C),
     V is A + C.
 
+%%%%% ADD %%%%%
+% same as above but in reverse, if A is the expression, then we evaluate A and add it to B
+% example usage, eval(add(add(3, 4), 3), V) --> V = eval(add(3, 4))  + 3 --> V = (3 + 4) + 3 --> V = 10
 eval(add(A, B), V) :-
     number(B),
     eval(A, C),
     V is C + B.
 
+%%%%% SUB %%%%%
+% case when both variables in the sub is numeric
+% subtract B from A
+% example usage, eval(sub(10, 5), V) --> V = 10 - 5 --> V = 5
 eval(sub(A, B), V) :- 
     number(A),
     number(B),
     V is A - B.
 
+%%%%% SUB %%%%%
+% case when the first variable in the sub is numeric, and the second variable is an expression
+% evaluate the expression  for the second and store the result in C
+% subtract C from A
+% example usage, eval(sub(10, sub(10, 5)), V) --> V = 10 - eval(sub(10, 5)) --> V = 10 - (10 - 5) --> V = 5
 eval(sub(A, B), V) :-
     number(A),
     eval(B, C),
     V is A - C.
 
+%%%%% SUB %%%%%
+% same as above but in reverse, if A is the expression, then we evaluate A and subtract B from A
+% example usage, eval(sub(sub(15, 5), 5), V) --> V = eval(sub(15, 5))  - 5 --> V = (15 - 5) - 5 --> V = 5
 eval(sub(A, B), V) :-
     number(B),
     eval(A, C),
     V is C - B.
 
+%%%%% MUL %%%%%
+% case when both variables in the mul is numeric
+% multiply A and B
+% example usage, eval(mul(10, 5), V) --> V = 10 * 5 --> V = 50
 eval(mul(A, B), V) :- 
     number(A),
     number(B),
     V is A * B.
 
+%%%%% MUL %%%%%
+% case when the first variable in the mul is numeric, and the second variable is an expression
+% evaluate the expression for the second and store the result in C
+% multiply A * C
+% example usage, eval(mul(10, add(10, 5)), V) --> V = 10 * eval(add(10, 5)) --> V = 10 * (10 + 5) --> V = 150
 eval(mul(A, B), V) :-
     number(A),
     eval(B, C),
     V is A * C.
 
+%%%%% MUL %%%%%
+% same as above but in reverse, if A is the expression, then we evaluate A and multiply by B
+% example usage, eval(mul(add(10, 5), 10), V) --> V = eval(add(10, 5))  * 10 --> V = (10 + 5) * 10 --> V = 150
 eval(mul(A, B), V) :-
     number(B),
     eval(A, C),
     V is C * B.
 
+%%%%% DIV %%%%%
+% case when both variables in the div is numeric
+% divide A by B
+% example usage, eval(div(10, 5), V) --> V = 10 / 5 --> V = 2
 eval(div(A, B), V) :-
     number(A),
     number(B),
     V is A/B.
 
+%%%%% DIV %%%%%
+% case when the first variable in the div is numeric, and the second variable is an expression
+% evaluate the expression for the second and store the result in C
+% divide A by C
+% example usage, eval(div(10, sub(10, 8)), V) --> V = 10 / eval(sub(10, 8)) --> V = 10 / (10 - 8) --> V = 2
 eval(div(A, B), V) :- 
     number(A),
     eval(B, C),
     V is A/C.
 
+%%%%% DIV %%%%%
+% same as above but in reverse, if A is the expression, then we evaluate A and divide by B
+% example usage, eval(div(add(10, 5), 3), V) --> V = eval(add(10, 5))  / 3 --> V = (10 + 5) / 3 --> V = 5
 eval(div(A, B), V) :- 
     number(B),
     eval(A, C),
