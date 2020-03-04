@@ -138,14 +138,14 @@ interpolant
     
     \item \textbf{Now copy idastar.pl to a new file heuristic.pl and modify the code of this new file so that it uses an Iterative Deepening version of the Heuristic Path Search algorithm discussed in the Weak 2 Tutorial Exercise, with w = 1.2 . In your submitted document, briefly show the section of code that was changed, and the replacement code.}\fixindent{}\\
     Solution:\\
-    using the evaluation function, $f(n) = (2 - w) \cdot g(n) + w \cdot h(n)$, where $0 \leq w \leq 2$, with w = 1.2 gives us the following function to use to measure cost $f(n) = (0.8) \cdot g(n) + 2 \cdot h(n)$. The only modifications made to the code was changing the line that computed the evaluation function shown in Figure 1.\\
+    using the evaluation function, $f(n) = (2 - w) \cdot g(n) + w \cdot h(n)$, where $0 \leq w \leq 2$, with w = 1.2 gives us the following function to use for measuring cost $f(n) = (0.8) \cdot g(n) + 2 \cdot h(n)$. The only modifications made to the code was changing the line that computed the evaluation function shown in Figure 1.\\
     \begin{figure}[h!]
       \begin{center}
             \includegraphics[width=0.6\textwidth]{changes.png}
       \end{center}
             \caption{The only line of code changed to create heuristic.pl}
     \end{figure}\\
-    The full code for heuristic.pl is shown in Figure 2.\\
+    The full code for heuristic.pl is shown in Figure 2.
     \begin{figure}[h!]
       \begin{center}
             \includegraphics[height=1.0\textwidth]{full code.png}
@@ -158,7 +158,7 @@ interpolant
     \includegraphics[width=400px]{table3.png}\\
     \item \textbf{Briefly discuss the tradeoff between speed and quality of solution for these five algorithms.}\fixindent{}\\
     Solution:\\\\
-    What can be observed from IDA* which was the slowest to compute and expanded most nodes is that, it always found the optimal solution and didn’t over-shoot the shortest path. From the three algorithms involving the heuristic path search weighting, what can be observed is that as the weighting is increased the length of the path had increased, however the number of nodes expanded was dramatically decreased. As the weighting increased, the evaluation cost would use less of the actual cost of the path and rely more on the heuristic cost of the path giving us a quicker solution however the quality of the solution would be worse. The greedy search was by far the fastest in terms of expanding the least number of nodes, however the solution given was the lowest in quality, having a path length of 164. There is a direct correlation between speed of the algorithm and quality of the solution, the faster the solution was (expanding less nodes), the worse the quality of the solution was (longer paths). It can be noted that as w is closer to 1, we get a vanilla IDA* search, and as it approaches 2 the search becomes greedier, using less of the actual cost of the path, at w = 1.8 the quality and time of the solution in fact is worse than greedy, with G = 240 and N = 35557. In summary\\
+    What can be observed from IDA* which was the slowest to compute, expanding the most nodes, is that it always found the optimal solution and didn’t over-shoot the shortest path. From the three algorithms involving the heuristic path search weighting, what can be observed is that as the weighting is increased the length of the path had increased, however the number of nodes expanded was dramatically decreased. As the weighting increased, the evaluation cost would use less of the actual cost of the path and rely more on the heuristic cost of the path giving us a quicker solution however the quality of the solution would be worse. The greedy search was by far the fastest in terms of expanding the least number of nodes, however the solution given was the lowest in quality, having a path length of 164 for start50. There is a direct correlation between speed of the algorithm and quality of the solution, the faster the solution was (expanding less nodes), the worse the quality of the solution was (longer paths). The change in speed does not have to do with the implementation of the algorithm but the evaluation cost of paths used in the algorithm. It can be noted that when w is closer to 1, we get a vanilla IDA* search, and as it approaches 2 the search becomes greedier, using less of the actual cost of the path, at w = 1.8 the quality and time of the solution in fact is worse than greedy, with G = 240 and N = 35557. In summary\\
     Ranking Speed
     \begin{enumerate}[1.]
         \item Greedy
@@ -176,7 +176,7 @@ interpolant
         \item Greedy
     \end{enumerate}
 
-The graphs in Figure 3, 4 and 5 display the algorithms in terms of quality, and as can be noticed, the higher the quality (smaller path length) the more time was taken to perform the search. There were a few anomalies such as start60 and start64 using the heuristic path search algorithm with w = 1.4 and w = 1.6, where the length of the path is longer (lower quality solution) and more time was taken to complete the search (more nodes expanded). Generally lower quality solutions are faster to generate than more optimal solutions as the heuristic is no longer admissible after w = 1, we rely less on the actual cost and over-estimate with the heuristic cost giving us worse quality solutions.
+The graphs in Figure 3, 4 and 5 display the algorithms in terms of quality vs speed, and as can be noticed, the higher the quality (smaller path length) the more time was taken to perform the search (more nodes expanded). There were a few anomalies such as start60 and start64 using the heuristic path search algorithm with w = 1.4 and w = 1.6, where the length of the path is longer (lower quality solution) and more time was taken to complete the search (more nodes expanded). Generally lower quality solutions are faster to generate than more optimal solutions as the heuristic is no longer admissible after w = 1, we rely less on the actual cost of the path and over-estimate with the heuristic cost giving us worse quality solutions. however these solutions reach goal state much quicker.
 
 \begin{figure}[h!]
       \begin{center}
