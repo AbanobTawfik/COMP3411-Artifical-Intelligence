@@ -121,7 +121,7 @@ eval(add(A, B), V) :-
 eval(add(A, B), V) :-
     number(B),
     eval(A, C),
-    V is B + C.
+    V is C + B.
 
 eval(sub(A, B), V) :- 
     number(A),
@@ -136,7 +136,7 @@ eval(sub(A, B), V) :-
 eval(sub(A, B), V) :-
     number(B),
     eval(A, C),
-    V is B - C.
+    V is C - B.
 
 eval(mul(A, B), V) :- 
     number(A),
@@ -151,17 +151,17 @@ eval(mul(A, B), V) :-
 eval(mul(A, B), V) :-
     number(B),
     eval(A, C),
-    V is B * C.
+    V is C * B.
 
 eval(div(A, B), V) :-
     number(A),
     number(B),
-    V is B/A.
+    V is A/B.
 
 eval(div(A, B), V) :- 
     number(A),
     eval(B, C),
-    V is C/A.
+    V is A/C.
 
 eval(div(A, B), V) :- 
     number(B),

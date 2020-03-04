@@ -1,0 +1,203 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs} % for "\midrule" macro
+\usepackage{lipsum} % for filler text
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{lplfitch}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{bbm}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+%note this LaTeX package was not written by me and taken from stackexchange forums to be used to write java code formatted
+%link to original page https://stackoverflow.com/questions/3175105/inserting-code-in-this-latex-document-with-indentation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%note this LaTeX package was not written by me and taken from stackexchange forums to be used to write z3 code formatted
+%link to original page https://github.com/mewmew/latex/blob/master/z3/lang.sty
+\lstdefinelanguage{z3}{
+	sensitive=true,
+	alsoletter={\-},
+	% comments.
+	%    ; line comment
+	comment=[l]{;},
+	% Z3 keywords.
+	keywords=[1]{
+apply, assert, assert-soft, check-sat, check-sat-using, compute-interpolant,
+declare-const, declare-datatypes, declare-fun, declare-map, declare-rel,
+declare-sort, declare-tactic, define-sort, display, echo, eval, exit,
+fixedpoint-pop, fixedpoint-push, get-assertions, get-assignment, get-info, get-
+interpolant, get-model, get-option, get-proof, get-unsat-core, get-user-tactics,
+get-value, help, help-tactic, labels, maximize, minimize, pop, push, query,
+reset, rule, set-info, set-logic, set-option, simplify
+	},
+	% Z3 built-ins
+	morekeywords=[2]{
+check-sat-using, declare-var, declare-rel, rule, query, set-predicate-
+representation, maximize, minimize, assert-soft, assert-weighted, compute-
+interpolant
+	},
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand*\moveToRight[1]{\hspace*{0em plus 1fill}\makebox{(#1)}}
+\newcommand*\fixindent{ \hspace{1pt}\\}
+%this command below is not my work was used for quality of life
+%link to original post 
+%https://tex.stackexchange.com/questions/330588/how-to-produce-given-number-of-quad-in-math
+\newcommand{\myquad}[1][1]{\hspace*{#1em}\ignorespaces}
+
+\title{Part2}
+\author{Abanob Tawfik\\z5075490 }
+\date{March 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Question 1}
+\begin{enumerate}[a)]
+    \item \textbf{Draw up a table with four rows and five columns. Label the rows as UCS, IDS, A* and IDA*, and the columns as start10, start12, start20, start30 and start40. Run each of the following algorithms on each of the 5 start states:
+    \begin{enumerate}[(i)]
+        \item {[ucsdijkstra]} 
+        \item {[ideepsearch] }
+        \item {[astar]}
+        \item {[idastar] }
+    \end{enumerate}
+    In each case, record in your table the number of nodes generated during the search. If the algorithm runs out of memory, just write “Mem” in your table. If the code runs for five minutes without producing out- put, terminate the process by typing Control-C and then “a”, and write “Time” in your table. Note that you will need to re-start prolog each time you switch to a different search.
+    }\fixindent{}\\
+    Solution:\\
+    \fixindent{}
+    \includegraphics[width=400px]{table1.png}\\
+    \newpage
+    \item \textbf{b) Briefly discuss the efficiency of these four algorithms (including both time and memory usage).}\fixindent{}\\
+    Solution:\\
+    The UCS search was a variation of Dijkstra which is an uninformed search, in terms of time it was the slowest, and ran out of memory on every single starting position except 10. This is because each path being expanded is added to the queue  and we store all paths branching increasing size exponentially.
+        \begin{itemize}
+            \item Time: O($b^{[C*/\epsilon]}$) (note $[C*/\epsilon]$ = d when all transitions have same cost. d is depth, $C*$ is the cost of the optimal solution and $\epsilon$ is the minimum cost of transition)
+            \item Space: O($b^{[C*/\epsilon]}$) (note $[C*/\epsilon]$ = d when all transitions have same cost. d is depth, $C*$ is the cost of the optimal solution and $\epsilon$ is the minimum cost of transition)
+        \end{itemize}
+    \fixindent{}
+    The IDS search would run around the same speed as UCS, but it would never run out of memory. It was memory efficient and the only drawback was time taken for larger depths, in the cases of TIME it will reach depth 20 in the first 30 seconds, and then spend over 5 minutes getting to depth 23, and with enough time it would have found the solution. However note this search is the slowest search overall in comparison to the rest
+        \begin{itemize}
+            \item Time: O($b^d$)
+            \item Space: O($b*d$)
+        \end{itemize}
+    \fixindent{}
+    The A* search was an improved version of UCS, it was quick (second fastest with this data) however it was drawn back by memory usage, A* would weed out inefficient paths meaning it could go deeper than UCS and avoid storing useless paths in memory, however it suffers from the same drawback of running out of memory because each path being expanded is still added to the queue and we store all paths branching increasing size exponentially. Due to the informed nature of the search it would not expand down inefficient paths however and it is the fastest search in theory amongst the four.
+        \begin{itemize}
+            \item Time: depends on the heuristic O($b^d$) is worst case when heuristic = 0
+            \item Space: O($b^d$)
+        \end{itemize}
+    \fixindent{}
+    The IDA* search was the fastest search and also the only search able to complete Start40 under 5 minutes (it only took 30 seconds). The search was linear in memory usage, none of the cases would cause out of memory issues, it was a combination of A* speed and IDS memory efficiency. Note assuming infinite memory, this search is slower than A* and only in the data provided it happened to appear faster for the  start20 case.
+        \begin{itemize}
+            \item Time: depends on the heuristic O($b^d$) is worst case when heuristic = 0
+            \item Space: O($b*d$)
+        \end{itemize}
+    \fixindent{}
+    In summary, UCS and IDS are both uninformed meaning their time efficiency was slower than the informed searches and should only be used if there is no domain specific knowledge. In the case of UCS, it suffered memory issues. IDS  suffered no memory issues but at larger depths it was extremely time inefficient and would timeout. A* and IDA* are both informed searches meaning they are marginally more time efficient and should always be used over the uninformed searches (with an admissible heuristic of course). A* suffers the same memory issues as UCS since it is a breadth first search that utilizes a heuristic. IDA* didn’t suffer any memory issues and was the fastest search from the data used. IDA* can be slower than A* at larger depths and take a long time to find a solution, however it does not suffer from memory problems. 
+\end{enumerate}
+
+\newpage
+\section{Question 2}
+\begin{enumerate}[a)]
+    \item \textbf{(a)	Run [greedy] forstart50, start60 and start64, and record the values returned for G and N in the last row of your table (using the Manhattan Distance heuristic defined in puzzle15.pl).}\fixindent{}\\
+    Solution:\\
+    \includegraphics[width=400px]{table2.png}\\
+    
+    \item \textbf{Now copy idastar.pl to a new file heuristic.pl and modify the code of this new file so that it uses an Iterative Deepening version of the Heuristic Path Search algorithm discussed in the Weak 2 Tutorial Exercise, with w = 1.2 . In your submitted document, briefly show the section of code that was changed, and the replacement code.}\fixindent{}\\
+    Solution:\\
+    using the evaluation function, $f(n) = (2 - w) \cdot g(n) + w \cdot h(n)$, where $0 \leq w \leq 2$, with w = 1.2 gives us the following function to use to measure cost $f(n) = (0.8) \cdot g(n) + 2 \cdot h(n)$. The only modifications made to the code was changing the line that computed the evaluation function shown in Figure 1.\\
+    \begin{figure}[h!]
+      \begin{center}
+            \includegraphics[width=0.6\textwidth]{changes.png}
+      \end{center}
+            \caption{The only line of code changed to create heuristic.pl}
+    \end{figure}\\
+    The full code for heuristic.pl is shown in Figure 2.\\
+    \begin{figure}[h!]
+      \begin{center}
+            \includegraphics[height=1.0\textwidth]{full code.png}
+      \end{center}
+            \caption{full program for heuristic.pl}
+    \end{figure}\\
+    \newpage
+    \item \textbf{Run [heuristic] on start50, start60 and start64 and record the values of G and N in your table. Now modify your code so that the value of w is 1.4, 1.6 ; in each case, run the algorithm on the same three start states and record the values of G and N in your table.}\fixindent{}\\
+    Solution:\\\\
+    \includegraphics[width=400px]{table3.png}\\
+    \item \textbf{Briefly discuss the tradeoff between speed and quality of solution for these five algorithms.}\fixindent{}\\
+    Solution:\\\\
+    What can be observed from IDA* which was the slowest to compute and expanded most nodes is that, it always found the optimal solution and didn’t over-shoot the shortest path. From the three algorithms involving the heuristic path search weighting, what can be observed is that as the weighting is increased the length of the path had increased, however the number of nodes expanded was dramatically decreased. As the weighting increased, the evaluation cost would use less of the actual cost of the path and rely more on the heuristic cost of the path giving us a quicker solution however the quality of the solution would be worse. The greedy search was by far the fastest in terms of expanding the least number of nodes, however the solution given was the lowest in quality, having a path length of 164. There is a direct correlation between speed of the algorithm and quality of the solution, the faster the solution was (expanding less nodes), the worse the quality of the solution was (longer paths). It can be noted that as w is closer to 1, we get a vanilla IDA* search, and as it approaches 2 the search becomes greedier, using less of the actual cost of the path, at w = 1.8 the quality and time of the solution in fact is worse than greedy, with G = 240 and N = 35557. In summary\\
+    Ranking Speed
+    \begin{enumerate}[1.]
+        \item Greedy
+        \item Heuristic Path Search with w = 1.6
+        \item Heuristic Path Search with w = 1.4
+        \item Heuristic Path Search with w = 1.2
+        \item IDA*
+    \end{enumerate}
+    Ranking Quality of Search
+    \begin{enumerate}[1.]
+        \item IDA*
+        \item Heuristic Path Search with w = 1.2
+        \item Heuristic Path Search with w = 1.4
+        \item Heuristic Path Search with w = 1.6
+        \item Greedy
+    \end{enumerate}
+
+The graphs in Figure 3, 4 and 5 display the algorithms in terms of quality, and as can be noticed, the higher the quality (smaller path length) the more time was taken to perform the search. There were a few anomalies such as start60 and start64 using the heuristic path search algorithm with w = 1.4 and w = 1.6, where the length of the path is longer (lower quality solution) and more time was taken to complete the search (more nodes expanded). Generally lower quality solutions are faster to generate than more optimal solutions as the heuristic is no longer admissible after w = 1, we rely less on the actual cost and over-estimate with the heuristic cost giving us worse quality solutions.
+
+\begin{figure}[h!]
+      \begin{center}
+            \includegraphics[with=0.5\textwidth]{graph1.png}
+      \end{center}
+            \caption{Quality vs Time graph for start50}
+\end{figure}
+
+\begin{figure}[h!]
+      \begin{center}
+            \includegraphics[with=0.5,height=0.5\textwidth]{graph2.png}
+      \end{center}
+            \caption{Quality vs Time graph for start60}
+\end{figure}
+
+\begin{figure}[h!]
+      \begin{center}
+            \includegraphics[with=0.5, height=0.5\textwidth]{graph3.png}
+      \end{center}
+            \caption{Quality vs Time graph for start64}
+\end{figure}
+
+\end{enumerate}
+\end{document}
