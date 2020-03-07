@@ -79,6 +79,12 @@ paruns([Head | Tail], [OddRun | Reset]) :-
     oddRun([Head | Tail], OddRun, Rest),
     paruns(Rest, Reset).
 
+% same logic as handling odd runs, just flipped around for even values
+paruns([Head | Tail], [EvenRun | Reset]) :-
+    Head mod 2 =:= 0,
+    evenRun([Head | Tail], EvenRun, Rest),
+    paruns(Rest, Reset).  
+    
 % base case for oddrun, no more values to compute
 oddRun([], [], []).
 
@@ -95,12 +101,6 @@ oddRun([Head | Tail], [], [Head | Tail]) :-
 oddRun([Head | Tail], [Head | NextOdd], Rest) :-
     Head mod 2 =\= 0,
     oddRun(Tail, NextOdd, Rest).
-
-% same logic as handling odd runs, just flipped around for even values
-paruns([Head | Tail], [EvenRun | Reset]) :-
-    Head mod 2 =:= 0,
-    evenRun([Head | Tail], EvenRun, Rest),
-    paruns(Rest, Reset).  
 
 % base case for even run, no more values to computer
 evenRun([], [], []).
