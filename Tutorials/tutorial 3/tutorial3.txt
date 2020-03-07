@@ -1,0 +1,37 @@
+Question 1.
+
+Arad --> Bucharest
+alphabetical cost if choosing between same cost
+(1) DFS: [Arad --> Zerind --> Oradea --> Sibiu --> Rimnicu Village --> pitesti --> Bucharest]
+(2) BFS: [Arad --> Zerind --> Timisoara --> Sibiu --> Oradea --> Rimnicu Vilcea --> Fagaras --> Bucharest]
+(3) UCS: [Arad --> Zerind --> Timisoara --> Sibiu --> Oradea --> Rimnicu Vilcea --> Fagaras --> Bucharest --> Lugoj --> Pitesti --> mehadia --> Cralova --> Dobreta]
+(4) IDS: [Arad --> Zerind --> Timisoara --> sibiu | D1, Arad --> Zerind --> Timisoara --> Sibiu --> Oradea --> Rimnicu Vilcea --> Fagaras --> Lugoj | D2,
+          Arad --> Zerind --> Timisoara --> Sibiu --> Oradea --> Rimnicu --> Fagaras --> Bucharest]
+(5) GBS: [Arad --> Sibiu --> Fagaras --> Bucharest]
+(6) A* : [Arad --> Sibiu --> Rimnicu Vilcea --> Pitesti --> Bucharest]
+
+Question 2.
+If the heuristic value for Fagaras was 176, and the heuristic value for pitesti was 98 the following would occur
+for GBS the search would remain the same, for A* however, the path would change To
+[Arad --> Sibiu --> Rimnicu --> Fagaras --> Pitesti --> Bucharest], assuming the heuristic remained admissible, the path to reach goal from Fagaras
+is still longer than from pitesti.
+
+Question 3.
+(1) BFS: [S --> A --> C --> B --> D --> T --> U --> X --> W --> V --> Y --> Z --> E --> Z --> F --> G]
+(2) DFS: [S --> A --> B --> T --> V --> X --> U --> C --> D (cycle backtrack to X) --> W --> F --> Z --> G]
+(3) UCS: [S --> A --> C --> D --> U --> X --> T --> V --> W --> Y --> F --> G --> Z]
+(4) GBS: [S --> C --> X --> Z --> G]
+(5) A* : [S --> C --> A --> B --> D --> X --> U --> W --> F --> Z --> G]
+
+Question 4.
+1. This is true since BFS is just a uniform cost search, where every transition has a cost of 1
+2. BFS is best first search with f(n) = depth(n), DFS is a best first search with the same evaluation function, and UCS is a best first search with f(n) = g(n) (cost of path).
+3. this is true, uniform cost search is just A* search with a 0 heuristic.
+
+Question 5.
+when w = 0, we have a best first search, because f(n) = 2*g(n), which can be simplified to cost of path
+when w = 1, we have A* search, f(n) = g(n) + h(n)
+when w = 2, we have a greedy best-first search, because f(n) = 2*h(n), which is just the heuristic cost to next transition.
+
+The algorithm is optimal when 0 <= w <= 1, this is because scaling g(n) by a constant doesn't effect the ordering of the paths relatively, but when w > 1 then the heuristic cost can over-estimate
+The algorithm is complete when 0 <= w < 2, this is because greedy best-first search is not complete.
