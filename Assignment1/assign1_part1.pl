@@ -137,23 +137,11 @@ eval(add(A, B), V) :-
     number(B),
     V is A + B.
 
-%%%%% ADD %%%%%
-% case when the first variable in the add is numeric, and the second variable is an expression
-% evaluate the expression  for the second and store the result in C
-% add A and C together
-% example usage, eval(add(3, add(3, 4)), V) --> V = 3 + eval(add(3, 4)) --> V = 3 + (3 + 4) --> V = 10
+% otherwise evaluate both sub-expressions
 eval(add(A, B), V) :-
-    number(A),
-    eval(B, C),
-    V is A + C.
-
-%%%%% ADD %%%%%
-% same as above but in reverse, if A is the expression, then we evaluate A and add it to B
-% example usage, eval(add(add(3, 4), 3), V) --> V = eval(add(3, 4))  + 3 --> V = (3 + 4) + 3 --> V = 10
-eval(add(A, B), V) :-
-    number(B),
     eval(A, C),
-    V is C + B.
+    eval(B, D),
+    V is C + D.
 
 %%%%% SUB %%%%%
 % case when both variables in the sub is numeric
@@ -164,23 +152,11 @@ eval(sub(A, B), V) :-
     number(B),
     V is A - B.
 
-%%%%% SUB %%%%%
-% case when the first variable in the sub is numeric, and the second variable is an expression
-% evaluate the expression  for the second and store the result in C
-% subtract C from A
-% example usage, eval(sub(10, sub(10, 5)), V) --> V = 10 - eval(sub(10, 5)) --> V = 10 - (10 - 5) --> V = 5
+% otherwise evaluate both sub-expressions
 eval(sub(A, B), V) :-
-    number(A),
-    eval(B, C),
-    V is A - C.
-
-%%%%% SUB %%%%%
-% same as above but in reverse, if A is the expression, then we evaluate A and subtract B from A
-% example usage, eval(sub(sub(15, 5), 5), V) --> V = eval(sub(15, 5))  - 5 --> V = (15 - 5) - 5 --> V = 5
-eval(sub(A, B), V) :-
-    number(B),
     eval(A, C),
-    V is C - B.
+    eval(B, D),
+    V is C - D.
 
 %%%%% MUL %%%%%
 % case when both variables in the mul is numeric
@@ -191,23 +167,11 @@ eval(mul(A, B), V) :-
     number(B),
     V is A * B.
 
-%%%%% MUL %%%%%
-% case when the first variable in the mul is numeric, and the second variable is an expression
-% evaluate the expression for the second and store the result in C
-% multiply A * C
-% example usage, eval(mul(10, add(10, 5)), V) --> V = 10 * eval(add(10, 5)) --> V = 10 * (10 + 5) --> V = 150
+% otherwise evaluate both sub-expressions
 eval(mul(A, B), V) :-
-    number(A),
-    eval(B, C),
-    V is A * C.
-
-%%%%% MUL %%%%%
-% same as above but in reverse, if A is the expression, then we evaluate A and multiply by B
-% example usage, eval(mul(add(10, 5), 10), V) --> V = eval(add(10, 5))  * 10 --> V = (10 + 5) * 10 --> V = 150
-eval(mul(A, B), V) :-
-    number(B),
     eval(A, C),
-    V is C * B.
+    eval(B, D),
+    V is C * D.
 
 %%%%% DIV %%%%%
 % case when both variables in the div is numeric
@@ -218,20 +182,8 @@ eval(div(A, B), V) :-
     number(B),
     V is A/B.
 
-%%%%% DIV %%%%%
-% case when the first variable in the div is numeric, and the second variable is an expression
-% evaluate the expression for the second and store the result in C
-% divide A by C
-% example usage, eval(div(10, sub(10, 8)), V) --> V = 10 / eval(sub(10, 8)) --> V = 10 / (10 - 8) --> V = 2
+% otherwise evaluate both sub-expressions
 eval(div(A, B), V) :- 
-    number(A),
-    eval(B, C),
-    V is A/C.
-
-%%%%% DIV %%%%%
-% same as above but in reverse, if A is the expression, then we evaluate A and divide by B
-% example usage, eval(div(add(10, 5), 3), V) --> V = eval(add(10, 5))  / 3 --> V = (10 + 5) / 3 --> V = 5
-eval(div(A, B), V) :- 
-    number(B),
     eval(A, C),
-    V is C/B.        
+    eval(B, D),
+    V is C/D.        
