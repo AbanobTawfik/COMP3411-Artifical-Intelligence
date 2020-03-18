@@ -1,0 +1,234 @@
+Question 1.
+
+Decide whether each of the following sentences is valid, satisfiable, or unsatisfiable. Verify
+your decisions using truth tables or logical equivalence and inference rules. For those that are
+satisfiable, list all the models that satisfy them. 
+
+a) Smoke => Smoke
+The sentence is valid and satisfiable, infact it is also a tautology
+Smoke => Smoke is also the same as ~Smoke v Smoke
+the following truth table shows
+~Smoke  Smoke   ~Smoke v Smoke
+T         T            T
+T         F            T
+F         T            T
+F         F            T
+all models are satisfiable in this 
+
+b) Smoke => Fire 
+The following is satisfiable, however not valid as there is a truth assignment that does not hold
+Smoke => Fire is also the same as ~Smoke v Fire
+the following truth table shows
+~Smoke   Fire   ~Smoke v Fire
+T         T            T
+T         F            T
+F         T            T
+F         F            F
+when there is Smoke and no fire, the model does not hold
+
+c) (Smoke => Fire) => (~Smoke => ~Fire)
+The following is satisifable however not valid as there is a truth assignment that does not hold
+(Smoke => Fire) => (~Smoke => ~Fire) is also the same as (Smoke ^ ~Fire) v (~Smoke v ~Fire) 
+The following truth table shows
+~Smoke   Fire   (Smoke ^ ~Fire)    (~Smoke v ~Fire)       (Smoke ^ ~Fire) v (~Smoke v ~Fire)
+T         T            F                   T                              T
+T         F            F                   T                              T
+F         T            F                   F                              F
+F         F            T                   T                              T
+when there is Smoke and fire, the model does not hold
+
+d) Smoke v Fire v ~Fire
+The sentence is valid and satisfiable, infact it is also a tautology
+The following truth table shows
+Smoke   Fire       Smoke v Fire v ~Fire
+T         T                 T
+T         F                 T
+F         T                 T
+F         F                 T
+all models are satisfiable in this 
+
+e) ((Smoke ^ Heat) => Fire) <=> ((Smoke => Fire) v (Heat => Fire))
+The sentence is valid and satisfiable, infact it is also a tautology
+(~Smoke v ~Heat v Fire) <=> (~Smoke v Fire v ~Heat)
+The following truth table shows
+Smoke    Heat     Fire     (~Smoke v ~Heat v Fire)       (~Smoke v Fire v ~Heat)         (~Smoke v ~Heat v Fire) <=> (~Smoke v Fire v ~Heat)
+T         T         T                  T                            T                                             T
+T         T         F                  F                            F                                             T
+T         F         T                  T                            T                                             T
+T         F         F                  T                            T                                             T
+F         T         T                  T                            T                                             T
+F         T         F                  T                            T                                             T
+F         F         T                  T                            T                                             T
+F         F         F                  T                            T                                             T
+all models are satisfiable in this 
+
+f) (Smoke => Fire) => ((Smoke ^ Heat) => Fire)
+The sentence is valid and satisfiable, infact it is also a tautology
+(Smoke ^ ~Fire) v (~Smoke v ~Heat v Fire)
+The following truth table shows
+Smoke    Heat     Fire            (Smoke ^ ~Fire) v (~Smoke v ~Heat v Fire)
+T         T         T                                    T
+T         T         F                                    T
+T         F         T                                    T
+T         F         F                                    T
+F         T         T                                    T
+F         T         F                                    T
+F         F         T                                    T
+F         F         F                                    T
+all models are satisfiable in this 
+
+g) Big v Dumb v (Big => Dumb)
+The sentence is valid and satisfiable, infact it is also a tautology
+The following truth table shows
+Big     Dumb      Big v Dumb v (Big => Dumb)
+T        T                   T           
+T        F                   T
+F        T                   T
+F        F                   T
+all models are satisfiable in this 
+
+h) (Big ^ Dumb) v ~Dumb
+The following is satisifable however not valid as there is a truth assignment that does not hold
+The following truth table shows
+Big     Dumb       (Big ^ Dumb) v ~Dumb
+T        T                   T           
+T        F                   T
+F        T                   F
+F        F                   T
+if someone is not big but also dumb, then the model does not hold.
+
+
+Question 2.
+
+a) ((P v Q) ^ ~P) => Q
+also can be written as 
+~((P v Q) ^ ~P) v Q, also
+((~P ^ ~Q) v P) v Q
+The following truth table shows
+P      Q            ((~P ^ ~Q) v P) v Q
+T      T                      T
+T      F                      T
+F      T                      T
+F      F                      T
+This sentence is a valid
+
+b) ((P => Q) ^ ~(P => R)) => (P => Q)
+also can be written as
+~((~P v Q) ^ (P ^ ~R)) v (~P v Q), also
+(~(~P v Q) v ~(P ^ ~R)) v (~P v Q), also
+((P ^ ~Q) v (~P v R) v (~P v Q))
+The following truth table shows
+P       Q         R               ((P ^ ~Q) v (~P v R) v (~P v Q))
+T       T         T                                T
+T       T         F                                T
+T       F         T                                T
+T       F         F                                T
+F       T         T                                T
+F       T         F                                T
+F       F         T                                T
+F       F         F                                T
+This sentence is a valid
+
+c) ~(~P ^ P) ^ P
+also can be written as
+(P v ~ P) ^ P
+The following truth table shows
+P         (P v ~ P) ^ P
+T                T
+F                F
+The following is not valid (can also just be seen as P as (P v ~P) is always true in the and, so and elimination works)
+
+d) (P v Q) => ~(~P ^ ~Q)
+also can be written as
+(~P ^ ~Q) v (P v Q)
+The following truth table shows
+P      Q           (~P ^ ~Q) v (P v Q)
+T      T                     T
+T      F                     T
+F      T                     T
+F      F                     T
+This sentence is valid
+
+Question 3.
+a)
+P => Q (Rule 1)
+~Q (Rule 2)
+~P (Desired conclusion)
+truth table shows
+P     Q    P => Q       ~Q      ~P
+T     T       T          F       F
+T     F       F          T       F
+F     T       T          F       T
+F     F       T          T       T  <===== HERE
+as can be shown rule 1, rule 2 entail our desired conclusion
+when all rule 1 and rule 2 are both true, our desired conclusion is also true
+
+b)
+P => Q (rule 1)
+~Q => ~P (Desired conclusion)
+truth table shows
+P      Q      P => Q      ~Q => ~P
+T      T        T            T  <===== HERE
+T      F        F            F
+F      T        T            T  <===== HERE
+F      F        T            T  <===== HERE
+as can be shown rule 1 entails our desired conclusion
+when all rule 1 is true, our desired conclusion is also true
+
+c)
+P => Q (Rule 1)
+Q => R (Rule 2)
+P => R (Desired conclusion)
+truth table shows
+P     Q      R       P => Q       Q => R    P => R
+T     T      T          T           T         T  <===== HERE
+T     T      F          T           F         F
+T     F      T          F           T         T
+T     F      F          F           T         F
+F     T      T          T           F         T
+F     T      F          T           T         T  <===== HERE
+F     F      T          T           T         T  <===== HERE
+F     F      F          T           T         T  <===== HERE
+as can be shown rule 1, rule 2 entail our desired conclusion
+when all rule 1 and rule 2 are both true, our desired conclusion is also true
+
+
+note in all parts of this question, there was no model where both our rules were true, and our conclusion was false
+
+Question 4.
+
+a) (Myth => ~Mortal) ^ (~Myth => (Mortal ^ Mammal)) ^ ((~Mortal v Mammal) => Horned) ^ (Horned => Magical)
+
+b) (~Myth v ~Mortal) ^ (Myth v (Mortal ^ Mammal)) ^ ((Mortal ^ ~Mammal) v Horned) ^ (~Horned v Magical)
+   (~Myth v ~Mortal) ^ (Myth v Mortal) ^ (Myth v Mammal) ^ (Horned v Mortal) ^ (Horned v ~Mammal) ^ (~Horned v Magical)
+
+c) proving unicorn is not horned by resolution
+1. ~Myth v ~Mortal 
+2. Myth v Mortal
+3. Myth v Mammal
+4. Horned v Mortal
+5. Horned v ~Mammal
+6. ~Horned v Magical
+7. ~Horned                    <- INSERTED 
+
+6. Mortal   R 7, 4
+7. ~Myth    R 6, 1
+8. ~Mortal  R 7, 1
+9. Mammal   R 7, 3
+10. Horned  R 9, 5
+11. EMPTY   R 10, 7
+
+4. it follows the unicorn is magical, as there is no resolution for magical, and infact the same proof can be done for magical
+   however it does not follow that the unicorn is mythical
+
+   the models that satisfy this KB is when Magical == T
+
+Question 5. Vocabularies
+
+a) Forall(x)(student(x) => studied(x, French, 2015)) where x is in the domain of student
+b) Forall(x)Exists(y)((student(y) ^ studied(y, Greek, 2014) ^ (x != y) ^ ~(student(x) => studied(x, Greek, 2014))) where x and y are both domain of student
+c) Forall(x)Forall(y)((top_Score(Greek, x) ^ top_Score(French, )) => higher(x, y)) where x and y are in the domain of scores for the subject
+d) forall(x)(policy(x, y) => smart(x)) where x is in the domain of people
+e) ~Exists(x)(policy(x, y) ^ expensive(y)) where x is the domain of people
+f) Exists(x)Forall(y)(Barber(x) ^ shaves(y, x) ^ not_shave_self(y)) where x and y are both the domain of people
+g) Exists(x)Exists(a)Forall(y)Forall(z)(fool(p, x, z)) ^ (fool(p, y, a)) ^ ~Fool(p, y, z), where x and y are the domain of people, and a and z are the domain of time
