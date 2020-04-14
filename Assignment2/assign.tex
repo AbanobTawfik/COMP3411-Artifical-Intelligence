@@ -17,6 +17,10 @@
 \usetikzlibrary{automata,positioning}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Abanob Tawfik}
+\rhead{z5075490}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -134,7 +138,7 @@ For the following Question the if then else statements representing the decision
     \begin{center}
     \hspace*{-3cm} \includegraphics[width=475px,height=250px]{tree2.png}
     \end{center}\\
-    This decision tree represents a different function than the tree from Figure 7.6 with the maximum information gain splits. The following if then else statements on the next page represent the function of the tree.
+    This decision tree represents the same function as the tree from Figure 7.6 with the maximum information gain splits. The following if then else statements on the next page represent the function of the tree.
     \newpage
     \begin{lstlisting}
         if(e.WhereRead == Work){
@@ -190,16 +194,16 @@ Length: All Long articles skip, as each long transition has a leaf node for skip
 
 Thread: All follow up threads were only read provided they are short and the author is known. all new threads will be read provided the article is short. This can be seen also in the maximum information gain tree.\\
 
-WhereRead: Regardless of the value of WhereRead, the output was not effect, this can be seen similair to above, where the children of WhereRead are identical, and the maximum information gain tree did not contain a node for WhereRead as it has no impact.\\
+WhereRead: Regardless of the value of WhereRead, the output was not effected, this can be seen similair to above, where the children of WhereRead are identical, and the maximum information gain tree did not contain a node for WhereRead as it has no impact.\\
 
-Author: all unknown authors are only read provided the article is short and new. All known authors are read provided the article is short and new. This can be seen in both trees by comparing the paths taken to the leaves.\\
+Author: all unknown authors are only read provided the article is short and new. All known authors are read provided the article is short. This can be seen in both trees by comparing the paths taken to the leaves.\\
 
-By comparing the paths taken to reach the leaves, we can see that for each input, we will have the same output for both trees, the path on the maximum information gain tree is just shorter. Since all input produce the same output for both functions, we can say both trees represent the same function. Despite the two trees representing the same function, The maximum information gain tree is far more efficient as there is alot less branches and it is much more compact. In practice whilst both produce the correct output, the tree from the maximum information gain is more desirable due to its compactness and speed in practice. \\
+By comparing the paths taken to reach the leaves, we can see that for each input, we will have the same output for both trees, the path on the maximum information gain tree is just shorter. Since all input produce the same output for both functions, we can say both trees represent the same function. Despite the two trees representing the same function, The maximum information gain tree is far more efficient as there is alot less branches and it is much more compact. In practice whilst both produce the same output, the tree from the maximum information gain is more desirable due to its compactness and speed in practice. \\
 
-As discussed in Part (a) we learnt that the maximum information gain tree had represented a different function than that of the tree in part (a). From this we can say that since the tree we have found represents the same function as the one from the maximum information gain tree, and the maximum information gain tree represents a different function than the tree in Part (a), we can say that the tree we have found represents a different function than the tree in Part (a).
+As discussed in Part (a) we learnt that the maximum information gain tree had represented a different function than that of the tree in Part (a). From this we can say that since the tree we have found represents the same function as the one from the maximum information gain tree, and the maximum information gain tree represents a different function than the tree in Part (a), we can say that the tree we have found represents a different function than the tree in Part (a).
 \newpage
 \item \textbf{Is there a tree that correctly classifies the training examples but represents a different function than those found by the preceding algorithms? If so, give it. If not, explain why.}\\Solution:\\
-as discussed in Part (b) the attribute WhereRead has no impact on the function of the tree. This means that the only attribute ordering which creates new tree are for the attributes [\emph{Author, Thread, Length}]. We have already discussed the tree for picking attributes in the order [\emph{Author, Thread, Length}], [\emph{Length, Thread, Author}] and [\emph{Thread, Length Author}] if  we ignore the WhereRead attribute, This means there are three other possible ways we can choose our attribute order.
+as discussed in Part (b) the attribute WhereRead has no impact on the function of the tree. This means that the only attribute ordering which creates new trees are for the attributes [\emph{Author, Thread, Length}]. We have already discussed the tree for picking attributes in the order [\emph{Author, Thread, Length}], [\emph{Length, Thread, Author}] and [\emph{Thread, Length Author}] if  we ignore the WhereRead attribute, This means there are only three other possible ways we can choose our attribute order.
     \begin{enumerate}[(1)]
         \item{[\emph{Length, Author, Thread}]}
         \item{[\emph{Author, Length, Thread}]}
@@ -209,7 +213,7 @@ The tree from picking attributes in order (1) is the following tree below
 \begin{center}
 \includegraphics[width=300px,height=200px]{tree3.png}
 \end{center}\\
-What can be observed from the tree, is that it is the exact same tree as the maximum information gain tree, with the Author and Thread attribute swapped around. What we can observe from this tree however is that for the length input, they will both produce the same output when it is long. For the Author output they both produce the same output when the author is known because regardless if the article is new or not in the maximum information gain tree, the leaf node of author is read when the author is known, The same applies for the Thread attribute, meaning that tree (1) represents the same function as the maximum information gain tree and the tree in part (b).\\
+What can be observed from the tree, is that it is the exact same tree as the maximum information gain tree By comparing the impact on each feature we see that for the  tree generated, all long articles are skipped and all short articles are read unless the author is unknown and the thread is a followup, This means that tree (1) represents the same function as the maximum information gain tree and the tree in Part (b).\\
 \newpage
 The tree from picking attributes in order (2) is the following tree below
 \begin{center}
@@ -237,10 +241,11 @@ In conclusion we explored every possible tree that can be created by selecting a
 
 \newpage
 \section{Decision trees}
-The goal is to take out-of-the-box models and apply them to a given dataset. The task is to analyse the data and build a model to predict whether income exceeds \$50K/yr based on census data (also known as "Census Income" dataset). Use the data set Adult Data Set from the Machine Learning repository [2]. Use the supervised learning methods discussed in the lectures, Decision Trees.\newline
+The goal is to take out-of-the-box models and apply them to a given dataset. The task is to analyse the data and build a model to predict whether income exceeds \$50K/yr based on census data (also known as "Census Income" dataset). Use the data set Adult Data Set from the Machine Learning repository [2]. Use the supervised learning methods discussed in the lectures, Decision Trees.
 
-Do not code these methods: instead use the implementations from scikit-learn. Read the scikit-learn documentation on Decision Trees [3], and the linked pages describing the parameters of the methods.\fixindent{}\fixindent{}
-
+\begin{flushleft}
+Do not code these methods: instead use the implementations from scikit-learn. Read the scikit-learn documentation on Decision Trees [3], and the linked pages describing the parameters of the methods.\\\\
+\end{flushleft}
 This question will help you master the workflow of model building. For example, you’ll get to practice how to use the critical steps:
 
 \begin{itemize}
@@ -251,4 +256,47 @@ This question will help you master the workflow of model building. For example, 
     \item {Transformation}
     \item {Feature engineering}
 \end{itemize}
+Use the sklearn documentation pages for instructions. You should need the classification algorithms.\\\\
+There are also available Tutorials:
+\begin{itemize}
+    \item Sklearn – official tutorial for the sklearn package 
+    \item Predicting wine quality with scikit-learn – Step-by-step tutorial for training a machine learning model
+\end{itemize}
+The data is available here: \href{http://archive.ics.uci.edu/ml/machine-learning-databases/adult/}{http://archive.ics.uci.edu/ml/machine-learning-databases/adult/}
+\newpage
+\fixindent{}From completing this question there were many things which i had learnt to building a model. from each critical step here is what i had done.\\
+\begin{itemize}
+    \item \textbf{Importing data}\\
+    Using the pandas library, i had imported all the data from the files into an array of objects containing one entry for each line in the data file.
+    \item \textbf{Cleaning data}\\
+    Some entries contained missing fields with the '?' as their value. These entries are unable to be analysed and were removed. To do this, I had first converted all the '?' values into NaN using numpy, and then i had used the pandas dropna function to remove all entries with any field containing NaN.
+    \item \textbf{Splitting into training/test data sets}\\
+    This was fairly simple as there were already separate files that contained a training set and a test set. I had functionised the data retrieval process and ran it on both separate files. In the case where we only had one data set, sklearn offers a test training split module which will take a percentage section for training and a percentage section for testing and provide two different data sets from one. This was however not necessary since we had both sets separately provided to us.
+    \item \textbf{Pre-processing}\\
+    Some attributes were strings, and this can be problematic for creating a decision tree of large scale, and the scikit library requires all input to be enumerated int32 values. To process the data to be used in an efficient manner, i had used the label encoder provided by scikit, which enumerates the string values into int32 values for usage in their classifier.
+    \item \textbf{Transformation}\\
+    After cleaning and pre-processing our data, our data was in a state where it could be used in an efficient manner. By removing all garbage entries and simplifying non-integer attributes, we had an efficient model which could be used inside our decision tree.
+    \item \textbf{Feature Engineering}\\
+    The methods chosen for selecting features is often the make or break for a machine learning project. The two methods for selecting features offered by scikit were "gini" and "entropy". I had chosen to use entropy as the lectures had discussed entropy and i was familiar with the concept. by using entropy maximum information gain to pick attributes, we had chosen the attribute with the lowest entropy value, giving us more meaningful splits. The difference between "gini" and "entropy" were very minor when it came to the accuracy of the classifier. When selecting a maximum depth for the tree in the classifier, I had observed that depths greater than 6 produced almost no increased accuracy, and depths of around 30 had lower accuracy, this can be attributed to Occham's Razor and overfitting. In order to pick a more generalised and readable tree, I had chosen my maximum feature depth as 6.
+\end{itemize}
+Below will show the code used in the creation of this project.
+
+\begin{center}
+\includegraphics[width=400px,height=250px]{Screenshot_1.png}
+\end{center}
+
+\begin{center}
+\includegraphics[width=400px,height=250px]{Screenshot_2.png}
+\end{center}
+
+\begin{center}
+\includegraphics[width=400px,height=50px]{Screenshot_3.png}
+\end{center}
+\\
+Output of the code shown below
+\begin{center}
+\includegraphics[width=400px,height=90px]{Screenshot_4.png}
+\end{center}\\
+The next page shows the decision tree that was created for the classifier using the methods described previously. If the image is too difficult to read, a link is provided below to the full decision tree pdf file, you can zoom in to take a more detailed view.\\
+\href{https://documentcloud.adobe.com/link/track?uri=urn\%3Aaaid\%3Ascds\%3AUS\%3A613d445e-e5bb-4fe5-a9d2-94f948ea9746}{https://documentcloud.adobe.com/link/track?uri=urn\%3Aaaid\%3Ascds\%3AUS\%3A613d445e-e5bb-4fe5-a9d2-94f948ea9746}
 \end{document}
