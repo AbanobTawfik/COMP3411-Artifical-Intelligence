@@ -220,7 +220,7 @@ The tree from picking attributes in order (2) is the following tree below
 \hspace*{-1cm}
 \includegraphics[width=376px,height=210px]{tree4.png}
 \end{center}\\
-What can be observed from the tree, is that the tree represents the same function as the maximum information gain tree. By comparing the impact on each feature we see that for the  tree generated, all long articles are skipped and all short articles are read unless the author is unknown and the thread is a followup. This is the exact behaviour shown in the minimal information gain tree.\newpage
+What can be observed from the tree, is that the tree represents a different function to the maximum information gain tree. What can be seen is that, short articles from unknown authors are skipped, regardless if its new or a followup, however in the maximum information gain tree, they are read. This means that the tree represents a different function than the maximum informaiton gain tree. This is also the case for the tree in part (a) as the tree in part (a) will not skip short articles from unknown authors that are new.\newpage
 The tree from picking attributes in order (3) is the following tree below
 \begin{center}
 \hspace*{-1cm}
@@ -234,9 +234,9 @@ Thread: Read all new articles from any author provided they are not long, if the
 
 Author: For unknown authors, the deciding factor relied on only the thread value, for known authors the length of the article became the determining factor. This can be seen from the tree in Part (a) by comparing the children of known and unknown authors, drawing the same conclusions.\\
 
-As can be seen Tree (3) represents the same function as the tree discovered in Part (a), in fact they both carry the same size and will have almost the same efficiency depending on the data received.
+As can be seen Tree (3) represents the same function as the tree discovered in Part (a), in fact they both carry the same size and will have almost the same efficiency depending on the data received.\\
 
-In conclusion we explored every possible tree that can be created by selecting attributes in all possible orders (ignoring WhereRead) and what was determined was that the trees in Part (a) and Part (b) represent all possible functions to classify the examples. This is because, WhereRead has no impact on the outcome of user action, and when we look at all remaining features, there are only three. By exhausting all possible orders to select features, all 6 combinations had simplified to the same two functions in Part (a) and Part (b).Thus there is no other tree that correctly classifies the training examples and represents a different function than that in Part (a) and Part (b).
+In conclusion Since Tree (2) had represented a different function than the tree in part (a) and the maximum information gain tree, there exists a tree that correctly classifies all the examples, but represents a different function.
 \end{enumerate}
 
 \newpage
