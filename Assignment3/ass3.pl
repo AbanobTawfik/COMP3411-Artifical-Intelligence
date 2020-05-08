@@ -163,11 +163,19 @@ possessive(her, [number(singular), gender(feminine)]).
 % process(LogicalForm, Ref1, Ref2).
 % process(event(lost, [actor(thing(john, [])), object(possessive(his, thing(wallet, [])))]), [], _G2751)
 
-process(event(_, []), [], Refs).
+process(event(_, []), _, _).
 
-process(event(_, [actor(X)| T]), Ref1, Refs) :-
-	process(event(_, X), Ref1, Ref2),
-	process(event(_, T), Ref1, Ref2).
+process(event(Event, [actor(X)| T]), Ref1, Ref2) :-
+	process(event(_, X), Ref1, RefB),
+	process(event(_, T), RefB, Ref2),
+	assert(history(event(Event, [actor(X) | T]))).
+
+% % set(thing(john,[]),thing(mary,[]))
+% % Call: (9) process(event(_G546, set(thing(john, []), thing(mary, []))), [], _G558) ? creep
+% process(event(Event, set(thing(X, Properties), T)), Ref1, Ref2) :-
+% 	process(event(Event, thing(X, Properties)), Ref1, RefB),
+% 	process(event(Event, T), RefB, Ref2),
+% 	assert(history(event(set(thing(X, Properties), T)))).
 
 process(event(_, thing(X, _)), Ref1, Ref2) :-
 	thing(X, Properties),
@@ -175,8 +183,8 @@ process(event(_, thing(X, _)), Ref1, Ref2) :-
 	% writeln(history(thing(X, Properties))).
 
 process(event(_, [object(X)| T]), Ref1, Ref2) :-
-	process(event(_, X), Ref1, Ref2),
-	process(event(_, T), Ref1, Ref2).
+	process(event(_, X), Ref1, RefB),
+	process(event(_, T), RefB, Ref2).
 
 % if we have something possessive e.g. his her we want to add the reference we find
 process(event(_, possessive(Pronoun, X)), Ref1, Ref2) :-
@@ -184,13 +192,23 @@ process(event(_, possessive(Pronoun, X)), Ref1, Ref2) :-
 	% look in history for a thing that matches!
 	history(thing(Ref, [_, gender(Gender),number(Number)])),
 	add_to_list(Ref, Ref1, Ref2),
-	process(event(_, X), Ref1, Ref2).
+	process(event(_, X), Ref2, Ref2).
 
-	% process(event(_, X), Ref1, Ref2),
-	% process(event(_, T), Ref1, Ref2).
+% % if we have something personal e.g. his her we want to add the reference we find
+% process(event(_, personal(they)), Ref1, Ref2) :-
+% 	writeln('im in').
+
+
+% if we have something personal e.g. his her we want to add the reference we find
+process(event(_, personal(Pronoun)), Ref1, Ref2) :-
+	personal(Pronoun, [number(Number), gender(Gender)]),
+	% look in history for a thing that matches!
+	history(thing(Ref, [_, gender(Gender),number(Number)])),
+	add_to_list(Ref, Ref1, Ref2).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 add_to_list(Element, [], [Element]).
-add_to_list(Element, [Head | Tail], [Head| NewTail]) :- add_to_list(Element, Tail, NewTail).
+add_to_list(Element, [H | Tail], [H | NewTail]) :- add_to_list(Element, Tail, NewTail).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 run(S, Refs) :-
 	sentence(X, S, []), !,
