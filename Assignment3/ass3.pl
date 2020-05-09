@@ -187,8 +187,8 @@ process(event(Event, set(personal(X), T)), Ref1, Ref2) :-
 	personal(X, [number(Number), gender(Gender)]),
 	% look in history for a thing that matches!
 	history(thing(Ref, [_, gender(Gender),number(Number)])),
-	process(event(Event, thing(Ref, [_, gender(Gender),number(Number)])), Ref1, RefB),
-	process(event(Event, T), RefB, Ref2),
+	add_to_list(Ref, Ref1, Ref2),
+	process(event(Event, T), Ref2, Ref2),
 	assert(history(event(set(thing(Ref, [_, gender(Gender),number(Number)]), T)))).	
 
 process(event(_, thing(X, _)), _, _) :-
@@ -197,7 +197,7 @@ process(event(_, thing(X, _)), _, _) :-
 
 process(event(_, [object(X)| T]), Ref1, Ref2) :-
 	process(event(_, X), Ref1, Ref2),
-	process(event(_, T), Ref1, Ref2).
+	process(event(_, T), Ref2, Ref2).
 
 % if we have something possessive e.g. his her we want to add the reference we find
 process(event(_, possessive(Pronoun, X)), Ref1, Ref2) :-
