@@ -20,12 +20,12 @@ np1(Number, thing(Name, [])) -->
 	proper_noun(Number, _, Name).
 np1(Number, personal(Pro)) -->
 	pronoun(Number, _, Pro).
-np1(Number1, possessive(Pos, thing(Noun, []))) -->
-	possessive_pronoun(Number1, _, Pos), noun(_, Noun).
+np1(Number1, possessive(Pos, NP)) -->
+	possessive_pronoun(Number1, _, Pos), noun_phrase(_, NP).
 np1(Number, object(Noun)) -->
 	num(Number), noun(Number, Noun).
 
-adjp([prop(Adj)]) --> adjective(Adj).
+adjp([Adj]) --> adjective(Adj).
 adjp([]) --> [].
 
 verb_phrase(Actor, Number, event(V, [actor(Actor) | Adv])) -->
@@ -60,8 +60,9 @@ determiner(_, _) --> [].
 
 pronoun(singular, masculine, he) --> [he].
 pronoun(singular, feminine, she) --> [she].
-pronoun(_, neutral, what) --> [what].
-pronoun(singular, neutral,Pro) --> [Pro], {member(Pro, [i, someone, it])}.
+pronoun(singular, neutral, that) --> [that].
+pronoun(plural, neutral, those) --> [those].
+pronoun(singular, neutral, Pro) --> [Pro], {member(Pro, [i, someone, it])}.
 pronoun(plural, neutral, Pro) --> [Pro], {member(Pro, [they, some])}.
 
 possessive_pronoun(singular, masculine, his) --> [his].
@@ -86,7 +87,7 @@ proper_noun(singular, Gender, Name) -->
 	}.
 proper_noun(singular, neutral, france) --> [france].
 
-adjective(adj(Adj)) --> [Adj], {member(Adj, [red,green,blue])}.
+adjective(prop(Adj)) --> [Adj], {member(Adj, [red,green,blue])}.
 
 verb(_, Verb) --> [Verb], {member(Verb, [lost,found,did,gave,looked,saw,forgot,is])}.
 verb(singular, Verb) --> [Verb], {member(Verb, [scares,hates])}.
@@ -97,7 +98,6 @@ adverb([]) --> [].
 
 % You may chose to use these items in the database to provide another way
 % of capturing an objects properties.
-% thing(x, Properties) will give us the properties of X
 
 thing(john, [isa(person), gender(masculine), number(singular)]).
 thing(sam, [isa(person), gender(masculine), number(singular)]).
@@ -142,10 +142,13 @@ event(gave, [actor(Person1), recipient(Person2), object(_), tense(past)]) :- Per
 
 % need to distinguish between personal pronouns and possessive pronouns
 % can link a posessive pronoun to a personal pronoun
+personal(i, [number(singular), gender(neutral)]).
 personal(he, [number(singular), gender(masculine)]).
 personal(she, [number(singular), gender(feminine)]).
 personal(it, [number(singular), gender(neutral)]).
-personal(they, [ number(plural), gender(neutral)]).
+personal(that, [number(singular), gender(neutral)]).
+personal(those, [number(plural), gender(neutral)]).
+personal(they, [number(plural), gender(neutral)]).
 
 possessive(his, [number(singular), gender(masculine)]).
 possessive(her, [number(singular), gender(feminine)]).
@@ -163,28 +166,28 @@ possessive(her, [number(singular), gender(feminine)]).
 % process(LogicalForm, Ref1, Ref2).
 % process(event(lost, [actor(thing(john, [])), object(possessive(his, thing(wallet, [])))]), [], _G2751)
 
-process(event(_, []), _, _).
+process(event(_, []), [], []).
+process(event(_, []), _, Refs).
 
 process(event(Event, [actor(X)| T]), Ref1, Ref2) :-
 	process(event(_, X), Ref1, RefB),
 	process(event(_, T), RefB, Ref2),
 	assert(history(event(Event, [actor(X) | T]))).
 
-% % set(thing(john,[]),thing(mary,[]))
-% % Call: (9) process(event(_G546, set(thing(john, []), thing(mary, []))), [], _G558) ? creep
-% process(event(Event, set(thing(X, Properties), T)), Ref1, Ref2) :-
-% 	process(event(Event, thing(X, Properties)), Ref1, RefB),
-% 	process(event(Event, T), RefB, Ref2),
-% 	assert(history(event(set(thing(X, Properties), T)))).
+% set(thing(john,[]),thing(mary,[]))
+% Call: (9) process(event(_G546, set(thing(john, []), thing(mary, []))), [], _G558) ? creep
+process(event(Event, set(thing(X, Properties), T)), Ref1, Ref2) :-
+	process(event(Event, thing(X, Properties)), Ref1, RefB),
+	process(event(Event, T), RefB, Ref2),
+	assert(history(event(set(thing(X, Properties), T)))).
 
 process(event(_, thing(X, _)), Ref1, Ref2) :-
 	thing(X, Properties),
 	assert(history(thing(X, Properties))).
-	% writeln(history(thing(X, Properties))).
 
 process(event(_, [object(X)| T]), Ref1, Ref2) :-
-	process(event(_, X), Ref1, RefB),
-	process(event(_, T), RefB, Ref2).
+	process(event(_, X), Ref1, Ref2),
+	process(event(_, T), Ref1, Ref2).
 
 % if we have something possessive e.g. his her we want to add the reference we find
 process(event(_, possessive(Pronoun, X)), Ref1, Ref2) :-
@@ -194,9 +197,14 @@ process(event(_, possessive(Pronoun, X)), Ref1, Ref2) :-
 	add_to_list(Ref, Ref1, Ref2),
 	process(event(_, X), Ref2, Ref2).
 
-% % if we have something personal e.g. his her we want to add the reference we find
-% process(event(_, personal(they)), Ref1, Ref2) :-
-% 	writeln('im in').
+% if we have something personal e.g. his her we want to add the reference we find
+% history(event(set(thing(john, []), thing(mary, [])))).
+process(event(_, personal(they)), Ref1, Ref2) :-
+	history(event(set(thing(X, Prop), T))),
+	% append([X], NewList, Result),
+	writeln(T).
+
+processList(event(set(thing(X, Prop)), Ref1, Ref2)) :-
 
 
 % if we have something personal e.g. his her we want to add the reference we find
