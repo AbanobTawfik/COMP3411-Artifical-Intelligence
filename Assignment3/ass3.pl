@@ -167,7 +167,7 @@ possessive(her, [number(singular), gender(feminine)]).
 % process(event(lost, [actor(thing(john, [])), object(possessive(his, thing(wallet, [])))]), [], _G2751)
 
 process(event(_, []), [], []).
-process(event(_, []), _, Refs).
+process(event(_, []), _, _).
 
 process(event(Event, [actor(X)| T]), Ref1, Ref2) :-
 	process(event(_, X), Ref1, RefB),
@@ -181,7 +181,7 @@ process(event(Event, set(thing(X, Properties), T)), Ref1, Ref2) :-
 	process(event(Event, T), RefB, Ref2),
 	assert(history(event(set(thing(X, Properties), T)))).
 
-process(event(_, thing(X, _)), Ref1, Ref2) :-
+process(event(_, thing(X, _)), _, _) :-
 	thing(X, Properties),
 	assert(history(thing(X, Properties))).
 
@@ -201,10 +201,12 @@ process(event(_, possessive(Pronoun, X)), Ref1, Ref2) :-
 % history(event(set(thing(john, []), thing(mary, [])))).
 process(event(_, personal(they)), Ref1, Ref2) :-
 	history(event(set(thing(X, Prop), T))),
-	% append([X], NewList, Result),
-	writeln(T).
-
-processList(event(set(thing(X, Prop)), Ref1, Ref2)) :-
+	% add the first thing in the set into array to insert into ref2
+	processList(thing(X, Prop), [], RefB),
+	% recursively add remaining "things" in set to array
+	processList(T, RefB, RealList),
+	% insert our array of "things" into refs
+	add_to_list(RealList, Ref1, Ref2).
 
 
 % if we have something personal e.g. his her we want to add the reference we find
@@ -215,6 +217,9 @@ process(event(_, personal(Pronoun)), Ref1, Ref2) :-
 	add_to_list(Ref, Ref1, Ref2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% create a list to append to our initial list (only fo rthey)
+processList(thing(X, _), List1, List2) :-
+	append([X], List1, List2).
 add_to_list(Element, [], [Element]).
 add_to_list(Element, [H | Tail], [H | NewTail]) :- add_to_list(Element, Tail, NewTail).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
