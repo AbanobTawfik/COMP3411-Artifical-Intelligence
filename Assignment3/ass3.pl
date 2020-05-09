@@ -181,6 +181,16 @@ process(event(Event, set(thing(X, Properties), T)), Ref1, Ref2) :-
 	process(event(Event, T), RefB, Ref2),
 	assert(history(event(set(thing(X, Properties), T)))).
 
+% set(thing(john,[]),thing(mary,[]))
+% Call: (9) process(event(_G546, set(thing(john, []), thing(mary, []))), [], _G558) ? creep
+process(event(Event, set(personal(X), T)), Ref1, Ref2) :-
+	personal(X, [number(Number), gender(Gender)]),
+	% look in history for a thing that matches!
+	history(thing(Ref, [_, gender(Gender),number(Number)])),
+	process(event(Event, thing(Ref, [_, gender(Gender),number(Number)])), Ref1, RefB),
+	process(event(Event, T), RefB, Ref2),
+	assert(history(event(set(thing(Ref, [_, gender(Gender),number(Number)]), T)))).	
+
 process(event(_, thing(X, _)), _, _) :-
 	thing(X, Properties),
 	assert(history(thing(X, Properties))).
